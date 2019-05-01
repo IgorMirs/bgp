@@ -1,2 +1,2 @@
-# bgp_verification
-Byzantine General Problem - verification
+# Byzantine General Problem - verification
+>> This part of Igor Mirsalikhov Thesis
