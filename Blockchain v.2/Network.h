@@ -14,6 +14,7 @@ class Network
 	uint32_t message = 999;
 public:
 	std::vector<Node> network;  //array of nodes
+	std::vector<std::vector<uint32_t>>  connect_matrix;  //connectivity matrix to detect connectivity of each node
 	Network();
 	Network(uint32_t number_of_nodes);					
 	void resizeNetwork(uint32_t value);			//edit the current network and make it with a new number of nodes
@@ -31,6 +32,8 @@ public:
 	void low_level_send_mes(uint32_t sending_mes, std::vector<uint32_t>  who_is_commander); //sending messages between nodes on the lowest level
 	void set_majority(std::vector<uint32_t> who_is_commander, uint32_t level, uint32_t column);		//set the majority of the particular level of majority matrix
 																									// to the particular column
+	void resize_connect_matrix(uint32_t number_of_nodes);
+	void print_connect_matrix();
 	bool checkByzantine(uint32_t withConsoleMessages, uint32_t printInFile); //check current state of network (print message on console or in file)
 	~Network();
 };

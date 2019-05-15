@@ -8,6 +8,7 @@ using namespace std;
 
 extern ofstream out;
 extern ofstream out_node;
+ifstream in;
 
 Network::Network()
 {
@@ -25,6 +26,7 @@ Network::Network(uint32_t number_of_nodes)
 {
 	network.resize(number_of_nodes);   //make size of array of Nodes equals N, avoid to have memory lost
 	SetNumberOfNodes(number_of_nodes);
+	resize_connect_matrix(number_of_nodes);
 	for (uint32_t i = 0; i < number_of_nodes; i++)
 	{
 		network[i].SetID(i);   //set id from 0 to N-1
@@ -599,6 +601,74 @@ void Network::set_majority(vector<uint32_t> who_is_commander, uint32_t level, ui
 		network[n].major_matrix[level - 1][who_is_commander[column]] = network[n].major_matrix_majority(level);
 		network[n].default_value_major_matrix(level); //return the level to -1
 
+	}
+}
+
+void Network::resize_connect_matrix(uint32_t number_of_nodes)
+{
+	connect_matrix.clear();
+	for (uint32_t i = 0; i < number_of_nodes; i++)
+	{
+		vector<uint32_t> temp;
+		for (uint32_t j = 0; j < number_of_nodes; j++)
+		{
+			temp.push_back(0);
+		}
+		connect_matrix.push_back(temp);
+	}
+	//put the connection to the random nodes
+	for (uint32_t i = 0; i < number_of_nodes; )
+	{
+		uint32_t R = rand() % this->GetNumberOfNodes();
+		if (R != i && connect_matrix[i][R] != 1)
+		{
+			connect_matrix[i][R] = 1;
+			connect_matrix[R][i] = 1;
+			i++;
+		}
+	}
+	//check is any node has at least two connections
+	for (uint32_t i = 0; i < number_of_nodes; i++)
+	{
+		uint32_t conn_quant = 0;
+		for (uint32_t j = 0; j < number_of_nodes; j++)
+		{
+			if (connect_matrix[i][j] == 1)
+				conn_quant++;
+		}
+		if (conn_quant < 2)
+		{
+			bool exit = false;
+			while (!exit)
+			{
+				uint32_t R = rand() % this->GetNumberOfNodes();
+				if (R != i && connect_matrix[i][R] != 1)
+				{
+					connect_matrix[i][R] = 1;
+					connect_matrix[R][i] = 1;
+					exit = true;
+				}
+			}
+		}
+	}
+}
+
+void Network::print_connect_matrix() 
+{
+	cout << "Connectivity matrix:" << '\n';
+	for (uint32_t i = 0; i < connect_matrix.size(); i++)
+	{
+		cout << "[";
+		for (uint32_t j = 0; j < connect_matrix[i].size(); j++)
+		{
+			if (j == connect_matrix[i].size() - 1)
+			{
+				cout << connect_matrix[i][j];
+			}
+			else
+				cout << connect_matrix[i][j] << ", ";
+		}
+		cout << "] " << endl;
 	}
 }
 
