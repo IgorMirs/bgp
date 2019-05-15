@@ -8,7 +8,7 @@ using namespace std;
 
 extern ofstream out;
 extern ofstream out_node;
-ifstream in;
+ifstream fin;
 
 Network::Network()
 {
@@ -651,6 +651,29 @@ void Network::resize_connect_matrix(uint32_t number_of_nodes)
 			}
 		}
 	}
+}
+
+void Network::connect_matrix_from_file()
+{
+	connect_matrix.clear();
+	for (uint32_t i = 0; i < this->GetNumberOfNodes(); i++)
+	{
+		vector<uint32_t> temp;
+		for (uint32_t j = 0; j < this->GetNumberOfNodes(); j++)
+		{
+			temp.push_back(0);
+		}
+		connect_matrix.push_back(temp);
+	}
+
+	uint32_t node1, node2;
+	ifstream fin("Connectivity.txt");
+	while (fin >> node1 >> node2)
+	{
+		connect_matrix[node1][node2] = 1;
+		connect_matrix[node2][node1] = 1;
+	}
+	fin.close();
 }
 
 void Network::print_connect_matrix() 
