@@ -247,8 +247,8 @@ int main()
 	uint32_t size = setSizeOfNetwork();
 	//create network
 	Network net(size);
-	net.connect_matrix_from_file();
-	net.print_connect_matrix();
+	//net.connect_matrix_from_file();
+	//net.print_connect_matrix();
 	//test_case(10);
 	//menu
 	bool Exit = false;

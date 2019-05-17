@@ -40,6 +40,7 @@ void Network::resizeNetwork(uint32_t value)
 	network.resize(value);   //make size of array of Nodes equals N, avoid to have memory lost
 	SetNumberOfNodes(value);
 	setNumberOfTraitors(0);
+	resize_connect_matrix(value);
 	for (uint32_t i = 0; i < value; i++)
 	{
 		network[i].SetID(i);   //set id from 0 to N-1
@@ -165,6 +166,8 @@ void Network::PrintNetwork()
 void Network::PrintNetworkOnScreen()
 {
 	cout << endl << "The CURRENT MESSAGE in the network is " << this->getMessage() << endl << endl;
+	this->print_connect_matrix();
+	cout << endl << endl;
 	for (uint32_t i = 0; i < network.size(); i++)
 	{
 		network[i].PrintNodeOnScreen();
@@ -670,6 +673,12 @@ void Network::connect_matrix_from_file()
 	ifstream fin("Connectivity.txt");
 	while (fin >> node1 >> node2)
 	{
+		if (node1 >= this->GetNumberOfNodes() || node2 >= this->GetNumberOfNodes())
+		{
+			cout << "Connectivity file is wrong!" << endl;
+			connect_matrix.clear();
+			break;
+		}
 		connect_matrix[node1][node2] = 1;
 		connect_matrix[node2][node1] = 1;
 	}
