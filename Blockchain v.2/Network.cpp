@@ -1,4 +1,4 @@
-#include "Network.h"
+﻿#include "Network.h"
 #include <iostream>
 #include <fstream>
 #include <ctime>
@@ -702,6 +702,80 @@ void Network::print_connect_matrix()
 		}
 		cout << "] " << endl;
 	}
+}
+
+std::vector<uint32_t> Network::shortest_path(uint32_t src, uint32_t dst)
+{
+	const uint32_t SIZE = this->GetNumberOfNodes();
+	vector<uint32_t> dist(SIZE);  //minimal distance
+	vector<bool> vert(SIZE); //checked vertices
+	uint32_t minindex;
+	dist.assign(SIZE, UINT32_MAX); //make all the distances really big
+	dist[src] = 0; //the distance to itself equal to 0 
+ 	vert.assign(SIZE, false);    //make all the vertices not checked
+
+	do {
+		minindex = UINT32_MAX;
+		uint32_t min = UINT32_MAX;
+		for (int i = 0; i < SIZE; i++)
+		{ // If vert not checked and dist less than min
+			if ((vert[i] == 0) && (dist[i] < min))
+			{ 
+				min = dist[i];
+				minindex = i;
+			}
+		}
+		//	Add the minimum weight to the current weight of the vert
+		if (minindex != UINT32_MAX)
+		{
+			for (int i = 0; i < SIZE; i++)
+			{
+				if (connect_matrix[minindex][i] > 0)
+				{
+					uint32_t temp = min + connect_matrix[minindex][i];
+					if (temp < dist[i])
+					{
+						dist[i] = temp;
+					}
+				}
+			}
+			vert[minindex] = 1;
+		}
+	} while (minindex < UINT32_MAX);
+
+
+	for (uint32_t i = 0; i < SIZE; i++) {
+		cout << dist[i] << ' ';
+		//cout << vert[i] << endl;
+	} 
+	cout << endl;
+
+	// Making the path
+	//***********************************create array here******************************************************
+	vector<vector<uint32_t>> ver(SIZE); // array of vertices
+	uint32_t end = dst; // end vertex
+	uint32_t j = 0;
+	ver[j].push_back(end); // put the end vertex to beginning
+	int weight = dist[end]; // weight of end vertex
+
+	while (end != src) // while not the source vertex
+	{
+		for (int i = 0; i < SIZE; i++) 
+			if (connect_matrix[end][i] != 0)   // if there is a connection in the connectivity matrix
+			{
+				int temp = weight - connect_matrix[end][i]; // weight from the previous vertex
+				if (temp == dist[i]) // if the weight equal
+				{                 
+					ver[j].push_back(i);
+					weight = temp; // save a new weight
+					end = i;       // make a new dst
+					break;
+				}
+			}
+	}
+	for (int i = ver[j].size() - 1; i >= 0; i--)
+		cout << ver[j][i] << ' ';
+	return std::vector<uint32_t>();
 }
 
 bool Network::checkByzantine(uint32_t withConsoleMessages = 0, uint32_t printInFile = 0)

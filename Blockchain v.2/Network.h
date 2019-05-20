@@ -33,8 +33,9 @@ public:
 	void set_majority(std::vector<uint32_t> who_is_commander, uint32_t level, uint32_t column);		//set the majority of the particular level of majority matrix
 																									// to the particular column
 	void resize_connect_matrix(uint32_t number_of_nodes); //make a random connection of nodes
-	void connect_matrix_from_file();
-	void print_connect_matrix();
+	void connect_matrix_from_file(); //upload connectivity matrix from file
+	void print_connect_matrix();  //print connectivity matrix
+	std::vector<uint32_t> shortest_path(uint32_t src, uint32_t dst); //define the shortest path for sending messages
 	bool checkByzantine(uint32_t withConsoleMessages, uint32_t printInFile); //check current state of network (print message on console or in file)
 	~Network();
 };
