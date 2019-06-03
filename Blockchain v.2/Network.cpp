@@ -55,6 +55,14 @@ uint32_t Network::getMessage()
 	return uint32_t(message);
 }
 
+uint32_t Network::make_fake_mes(uint32_t mes)
+{
+	if (mes == 0)
+		return 1;//making fake message opposite to real message
+	else 
+		return 0;
+}
+
 void Network::setMessage(uint32_t value)
 {
 	message = value;
@@ -214,14 +222,12 @@ void Network::SendMessages(uint32_t value = 100)
 		cin >> value;
 		cout << endl;
 		setMessage(value);    //the original message in network
-		if (value == 0) { fake_mes = 1; }  //making fake message opposite to real message
-		else { fake_mes = 0; }
+		fake_mes = make_fake_mes(value); //making fake message opposite to real message
 	}
 	else
 	{
 		setMessage(value);    //the original message in network
-		if (value == 0) { fake_mes = 1; }  //making fake message opposite to real message
-		else { fake_mes = 0; }
+		fake_mes = make_fake_mes(value); //making fake message opposite to real message
 	}
 
 	//set the output of the commander
@@ -238,7 +244,11 @@ void Network::SendMessages(uint32_t value = 100)
 			{
 				if (network[co2].GetIsCommander() == 1)  //do not send to himself
 					continue;
-				network[co2].major_matrix[0][co] = network[co].GetOutput()[0];
+				vector<uint32_t> path = shortest_path(co, co2);
+				if(traitors_in_vector(path))  //if there are traitors on the sending path - node get the opposite message
+					network[co2].major_matrix[0][co] = make_fake_mes(network[co].GetOutput()[0]);
+				else
+					network[co2].major_matrix[0][co] = network[co].GetOutput()[0];
 			}
 			break;
 		}
@@ -397,11 +407,8 @@ void Network::SendMessages(uint32_t value = 100)
 						{
 							if (network[previous_commander[k]].GetType() == 1)  //if any commander is traitor
 							{
-								uint32_t fake_mes;
-								if (this->getMessage() == 0) { fake_mes = 1; }  //making fake message opposite to real message
-								else { fake_mes = 0; }
 								//if we found traitor on any higher step that means that the node received fake message
-								network[t].major_matrix[level_temp][network[t].GetID()] = fake_mes;
+								network[t].major_matrix[level_temp][network[t].GetID()] = make_fake_mes(this->getMessage());
 								find_traitor = true;
 								break;
 							}
@@ -415,7 +422,7 @@ void Network::SendMessages(uint32_t value = 100)
 						//put the majority of the 'level_temp' to the 'level_temp - 1'
 						//detect the column where to put according to the previous who_is_commander vector and read the higher value of this vector on each step
 						network[t].major_matrix[level_temp - 1][previous_commander[column_temp]] = network[t].major_matrix_majority(level_temp);
-						//put the -1 to 'level_temp level
+						//put the -1 to 'level_temp' level
 						network[t].default_value_major_matrix(level_temp);
 					}
 					level_temp--;
@@ -438,19 +445,11 @@ void Network::SendMessages(uint32_t value = 100)
 			previous_commander = who_is_commander;
 
 			//check if any of current sending nodes is a traitor
-			bool noTraitors = true;
-			for (uint32_t k = 0; k < who_is_commander.size(); k++)
-			{
-				if (network[who_is_commander[k]].GetType() == 1)
-				{
-					noTraitors = false;
-					//if any of the commanders is a traitor we send the fake message
-					this->low_level_send_mes(fake_mes, who_is_commander); 
-					break;
-				}
-			}
-			if (noTraitors)
-				//if all the commanders are loyal we send the original message
+			//if any of the commanders is a traitor we send the fake message
+			if (traitors_in_vector(who_is_commander))
+				this->low_level_send_mes(fake_mes, who_is_commander); 
+			//if all the commanders are loyal we send the original message
+			else
 				this->low_level_send_mes(value, who_is_commander);
 
 			//set the majority
@@ -470,6 +469,12 @@ void Network::low_level_send_mes(uint32_t sending_mes, std::vector <uint32_t> wh
 {
 	bool node_is_already_sending;
 	bool node_not_receive;
+
+	//check is any traitor in who_is_commander vector
+	bool commanders_loyal = false;
+	if (!traitors_in_vector(who_is_commander))  //if there is no traitors in commanders vector this mean all commanders are loyal
+		commanders_loyal = true;
+
 	for (uint32_t i = 0; i < this->GetNumberOfNodes(); i++)
 	{
 		node_is_already_sending = false; //if there is such node in a who is commander vector
@@ -487,24 +492,13 @@ void Network::low_level_send_mes(uint32_t sending_mes, std::vector <uint32_t> wh
 			continue;
 
 		uint32_t current_mes = sending_mes;
+
 		//checking is the current node a traitor and what to do with a current message
 		if (network[i].GetType() == 1) //if the node is traitor he checks were any traitors before.
 		{                                //    if yes he do not change the current message. because all traitors work in team
-			bool first_traitor = true; //it means that this node is the first traitor in network and he will change the message
-			for (uint32_t k = 0; k < who_is_commander.size(); k++)
-			{
-				if (network[who_is_commander[k]].GetType() == 1)
-				{
-					first_traitor = false;
-					break;
-				}
-			}
-			if (first_traitor)
-			{
-				uint32_t fake_mes;
-				if (sending_mes == 0) { fake_mes = 1; }  //making fake message opposite to real message
-				else { fake_mes = 0; }
-				current_mes = fake_mes;
+			if (commanders_loyal) {
+				current_mes = make_fake_mes(sending_mes);  //making fake message opposite to sending message
+				
 			}
 		}
 
@@ -532,30 +526,35 @@ void Network::low_level_send_mes(uint32_t sending_mes, std::vector <uint32_t> wh
 				{
 					if (network[who_is_commander[k]].GetType() == 1)
 					{
-						uint32_t fake_mes;
-						if (this->getMessage() == 0) { fake_mes = 1; }  //making fake message opposite to real message
-						else { fake_mes = 0; }
-						network[j].major_matrix[this->GetNumberOfTraitors()][i] = fake_mes;
+						network[j].major_matrix[this->GetNumberOfTraitors()][i] = make_fake_mes(this->getMessage()); //making fake message opposite to real message
 						find_traitor = true;
 						break;
 					}
 				}
 				if (!find_traitor)
-				{
 					network[j].major_matrix[this->GetNumberOfTraitors()][j] = this->getMessage();
-				}
 
 				if (j != GetNumberOfNodes() - 1)
-				{
 					continue;            //go to the next node
-				}
 				else
 				{
 					//here we pass all the nodes this is the last node
 					break;                //if it is the last node - end sending messages
 				}
 			}
-			network[j].major_matrix[this->GetNumberOfTraitors()][i] = current_mes;  // for receving node j we put the current message to the row level and to the column of the sending node
+			//---------------------------------------------EXPERIMENT-----------------------------------
+			out_node << "SHORTEST PATH" << endl;
+			out_node << "from " << i << "	to " << j << endl;
+			vector<uint32_t> path = shortest_path(i, j);
+			for (int32_t path_c = path.size() - 1; path_c >= 0; path_c--)
+				out_node << path[path_c] << '	';
+			out_node << endl;
+			out_node << "TRAITORS ON THE PATH " << traitors_in_vector(path) << endl;
+			//---------------------------------------------END_OF_EXPERIMENT-----------------------------------
+			if (network[i].GetType() != 1 && traitors_in_vector(path) && commanders_loyal) //if there is a traitor on the sending path and message wasn't previously changed - we change the current message
+				network[j].major_matrix[this->GetNumberOfTraitors()][i] = make_fake_mes(sending_mes);  // for receving node j we put the current message to the row level and to the column of the sending node
+			else
+				network[j].major_matrix[this->GetNumberOfTraitors()][i] = current_mes;
 		}
 	}
 
@@ -620,40 +619,42 @@ void Network::resize_connect_matrix(uint32_t number_of_nodes)
 		connect_matrix.push_back(temp);
 	}
 	//put the connection to the random nodes
-	for (uint32_t i = 0; i < number_of_nodes; )
-	{
-		uint32_t R = rand() % this->GetNumberOfNodes();
-		if (R != i && connect_matrix[i][R] != 1)
+	/*if (number_of_nodes > 1) {
+		for (uint32_t i = 0; i < number_of_nodes; )
 		{
-			connect_matrix[i][R] = 1;
-			connect_matrix[R][i] = 1;
-			i++;
-		}
-	}
-	//check is any node has at least two connections
-	for (uint32_t i = 0; i < number_of_nodes; i++)
-	{
-		uint32_t conn_quant = 0;
-		for (uint32_t j = 0; j < number_of_nodes; j++)
-		{
-			if (connect_matrix[i][j] == 1)
-				conn_quant++;
-		}
-		if (conn_quant < 2)
-		{
-			bool exit = false;
-			while (!exit)
+			uint32_t R = rand() % this->GetNumberOfNodes();
+			if (R != i && connect_matrix[i][R] != 1)
 			{
-				uint32_t R = rand() % this->GetNumberOfNodes();
-				if (R != i && connect_matrix[i][R] != 1)
+				connect_matrix[i][R] = 1;
+				connect_matrix[R][i] = 1;
+				i++;
+			}
+		}
+		//check is any node has at least two connections
+		for (uint32_t i = 0; i < number_of_nodes; i++)
+		{
+			uint32_t conn_quant = 0;
+			for (uint32_t j = 0; j < number_of_nodes; j++)
+			{
+				if (connect_matrix[i][j] == 1)
+					conn_quant++;
+			}
+			if (conn_quant < 2)
+			{
+				bool exit = false;
+				while (!exit)
 				{
-					connect_matrix[i][R] = 1;
-					connect_matrix[R][i] = 1;
-					exit = true;
+					uint32_t R = rand() % this->GetNumberOfNodes();
+					if (R != i && connect_matrix[i][R] != 1)
+					{
+						connect_matrix[i][R] = 1;
+						connect_matrix[R][i] = 1;
+						exit = true;
+					}
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void Network::connect_matrix_from_file()
@@ -717,7 +718,7 @@ std::vector<uint32_t> Network::shortest_path(uint32_t src, uint32_t dst)
 	do {
 		minindex = UINT32_MAX;
 		uint32_t min = UINT32_MAX;
-		for (int i = 0; i < SIZE; i++)
+		for (uint32_t i = 0; i < SIZE; i++)
 		{ // If vert not checked and dist less than min
 			if ((vert[i] == 0) && (dist[i] < min))
 			{ 
@@ -728,7 +729,7 @@ std::vector<uint32_t> Network::shortest_path(uint32_t src, uint32_t dst)
 		//	Add the minimum weight to the current weight of the vert
 		if (minindex != UINT32_MAX)
 		{
-			for (int i = 0; i < SIZE; i++)
+			for (uint32_t i = 0; i < SIZE; i++)
 			{
 				if (connect_matrix[minindex][i] > 0)
 				{
@@ -743,13 +744,6 @@ std::vector<uint32_t> Network::shortest_path(uint32_t src, uint32_t dst)
 		}
 	} while (minindex < UINT32_MAX);
 
-
-	for (uint32_t i = 0; i < SIZE; i++) {
-		cout << dist[i] << ' ';
-		//cout << vert[i] << endl;
-	} 
-	cout << endl;
-
 	// Making the path
 	//***********************************create array here******************************************************
 	vector<vector<uint32_t>> ver(SIZE); // array of vertices
@@ -760,7 +754,7 @@ std::vector<uint32_t> Network::shortest_path(uint32_t src, uint32_t dst)
 
 	while (end != src) // while not the source vertex
 	{
-		for (int i = 0; i < SIZE; i++) 
+		for (uint32_t i = 0; i < SIZE; i++)
 			if (connect_matrix[end][i] != 0)   // if there is a connection in the connectivity matrix
 			{
 				int temp = weight - connect_matrix[end][i]; // weight from the previous vertex
@@ -773,9 +767,24 @@ std::vector<uint32_t> Network::shortest_path(uint32_t src, uint32_t dst)
 				}
 			}
 	}
-	for (int i = ver[j].size() - 1; i >= 0; i--)
-		cout << ver[j][i] << ' ';
-	return std::vector<uint32_t>();
+	//want to return only nodes in the middle between two nodes 
+	//delete the first element
+	auto iter = ver[j].cbegin();
+	ver[j].erase(iter);
+	//delete the last element
+	ver[j].pop_back();
+
+	return ver[j];
+}
+
+bool Network::traitors_in_vector (std::vector<uint32_t> vector)
+{
+	for (uint32_t i = 0; i < vector.size(); i++)
+	{
+		if (network[vector[i]].GetType() == 1) //if any of the middle nodes on the path is a traitor - return true
+			return true;
+	}
+	return false;
 }
 
 bool Network::checkByzantine(uint32_t withConsoleMessages = 0, uint32_t printInFile = 0)

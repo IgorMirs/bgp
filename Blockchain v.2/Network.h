@@ -19,6 +19,7 @@ public:
 	Network(uint32_t number_of_nodes);					
 	void resizeNetwork(uint32_t value);			//edit the current network and make it with a new number of nodes
 	uint32_t getMessage();						//get the original message of the network
+	uint32_t make_fake_mes(uint32_t mes);		//make an opposite message from the given message
 	void setMessage(uint32_t value);			//set the original message of the network
 	void setTraitors();							//set the traitors in the network
 	bool isCommanderLoyal();					//if commander is traitor - false; if loyal - true
@@ -36,6 +37,7 @@ public:
 	void connect_matrix_from_file(); //upload connectivity matrix from file
 	void print_connect_matrix();  //print connectivity matrix
 	std::vector<uint32_t> shortest_path(uint32_t src, uint32_t dst); //define the shortest path for sending messages
+	bool traitors_in_vector (std::vector<uint32_t> vector); //true if there is a traitors in any of the vector (for instance shortest path vector or who is commander vector)
 	bool checkByzantine(uint32_t withConsoleMessages, uint32_t printInFile); //check current state of network (print message on console or in file)
 	~Network();
 };

@@ -97,9 +97,18 @@ void checkByzantineGeneral(Network from, uint32_t whereToPrint = 0)  //whereToPr
 	}
 }
 
+void test_case2(uint32_t value) {
+	out.open("Check table.txt");
+
+	//Network test_net(1), loyal(1), traitor(1);
+	out << "M" << "\t|\t n" << "\t|\t m" << "\t|\t L" << "\t|\t T" << "\t|\t D" << endl; //message, number of nodes, number of traitors, loyals decision, traitor decision, total decision
+	out << endl << "----------------------------------------------------------------------------------------" << endl;
+	out.close();
+}
+
 void test_case(uint32_t value)
 {
-	Network test_net(1), loyal(1), traitor(1);;
+	Network test_net(1), loyal(1), traitor(1);
 	out.open("Check table.txt");
 	out << "M" << "\t|\t n" << "\t|\t m" << "\t|\t L" << "\t|\t T" << "\t|\t D" << endl; //message, number of nodes, number of traitors, loyals decision, traitor decision, total decision
 	out << endl << "----------------------------------------------------------------------------------------" << endl;
@@ -248,11 +257,14 @@ int main()
 	//create network
 	Network net(size);
 	net.connect_matrix_from_file();
-	net.print_connect_matrix();
-	net.shortest_path(0, 2);
-	//net.connect_matrix_from_file();
-	//net.print_connect_matrix();
-	//test_case(10);
+	/*net.print_connect_matrix();
+	vector<uint32_t> test1 = net.shortest_path(9, 7);
+	for (int32_t i = test1.size() - 1; i >= 0; i--)
+		out_node << test1[i] << '	';*/
+
+
+	//test_case(4);
+	
 	//menu
 	bool Exit = false;
 	do
