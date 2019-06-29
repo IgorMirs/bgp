@@ -1,0 +1,20 @@
+Current traitor is node number:		1
+Solution (1 - found; 0 - not found)	1
+
+Current traitor is node number:		2
+Solution (1 - found; 0 - not found)	1
+
+Current traitor is node number:		3
+Solution (1 - found; 0 - not found)	0
+
+Current traitor is node number:		4
+Solution (1 - found; 0 - not found)	0
+
+Current traitor is node number:		5
+Solution (1 - found; 0 - not found)	1
+
+Current traitor is node number:		6
+Solution (1 - found; 0 - not found)	1
+
+
+--------------------------------------------------------------------------

@@ -686,6 +686,63 @@ void Network::connect_matrix_from_file()
 	fin.close();
 }
 
+//vector <bool> a(6);
+//vector <uint32_t> b(6);
+//vector <vector<uint32_t>> matrix;
+//
+//void rec(uint32_t t)
+//{
+//	if (t == 6)
+//	{
+//		auto iter = b.cbegin();
+//		b.insert(iter, 0);
+//		matrix.push_back(b);
+//		iter = b.cbegin();
+//		b.erase(iter);
+//	}
+//
+//	for (uint32_t i = 0; i < 6; i++)
+//		if (!a[i])
+//		{
+//			b[t] = i + 1;
+//			a[i] = true;
+//			rec(t + 1);
+//			a[i] = false;
+//		}
+//}
+
+void Network::connect_matrix_from_file2(vector <uint32_t> number)
+{
+	
+
+
+	connect_matrix.clear();
+	for (uint32_t i = 0; i < this->GetNumberOfNodes(); i++)
+	{
+		vector<uint32_t> temp;
+		for (uint32_t j = 0; j < this->GetNumberOfNodes(); j++)
+		{
+			temp.push_back(0);
+		}
+		connect_matrix.push_back(temp);
+	}
+
+	uint32_t node1, node2;
+	ifstream fin("Connectivity.txt");
+	while (fin >> node1 >> node2)
+	{
+		if (node1 >= this->GetNumberOfNodes() || node2 >= this->GetNumberOfNodes())
+		{
+			cout << "Connectivity file is wrong!" << endl;
+			connect_matrix.clear();
+			break;
+		}
+		connect_matrix[number[node1]][number[node2]] = 1;
+		connect_matrix[number[node2]][number[node1]] = 1;
+	}
+	fin.close();
+}
+
 void Network::print_connect_matrix() 
 {
 	cout << "Connectivity matrix:" << '\n';

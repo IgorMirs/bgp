@@ -35,6 +35,7 @@ public:
 																									// to the particular column
 	void resize_connect_matrix(uint32_t number_of_nodes); //make a random connection of nodes
 	void connect_matrix_from_file(); //upload connectivity matrix from file
+	void connect_matrix_from_file2(std::vector <uint32_t> number); //upload connectivity matrix from file
 	void print_connect_matrix();  //print connectivity matrix
 	std::vector<uint32_t> shortest_path(uint32_t src, uint32_t dst); //define the shortest path for sending messages
 	bool traitors_in_vector (std::vector<uint32_t> vector); //true if there is a traitors in any of the vector (for instance shortest path vector or who is commander vector)
