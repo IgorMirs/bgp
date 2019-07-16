@@ -2,6 +2,8 @@
 #include <cstdint>
 #include <fstream>
 #include <iterator>
+#include <algorithm>
+#include <map>
 
 using namespace std;
 ofstream out_node;
@@ -10,68 +12,69 @@ Node::Node()
 {
 	ID = 0;
 	output_value.push_back(999);
-	IsCommander = false;
+	commander = false;
 	type = 0;
 }
 
-uint32_t Node::GetID()
+uint32_t Node::get_id()
 {
 	return ID;
 }
 
-uint32_t Node::GetType()
+uint32_t Node::get_type()
 {
 	return type;
 }
 
-void Node::SetID(uint32_t value)
+void Node::set_id(uint32_t value)
 {
 	ID = value;
 }
 
-bool Node::GetIsCommander()
+bool Node::is_commander()
 {
-	return IsCommander;
+	return commander;
 }
 
 
-void Node::SetIsCommander(bool commander)
+void Node::set_commander(bool value)
 {
-	IsCommander = commander;
+	commander = value;
 }
 
-vector<uint32_t> Node::GetOutput()
+vector<uint32_t> Node::get_output()
 {
 	return output_value;
 }
 
-void Node::SetOutput(uint32_t value)
+void Node::set_output(uint32_t value)
 {
 	output_value.assign(1, value);  // insert value instead default value
 }
 
-void Node::SetType(uint32_t value)
+void Node::set_type(uint32_t value)
 {
 	type = value;
 }
 
 
-void Node::PrintNode()
+void Node::print_node()
 {
+	
 	//print number
-	out_node << "Node number" << '\t' << GetID() << endl;
+	out_node << "Node number" << '\t' << get_id() << endl;
 	//print output only for the commander. we don't care about output of regular nodes
-	if (this->GetIsCommander() == 1)
+	if (this->is_commander() == 1)
 	{
 		out_node << "Output value" << '\t';
-		for (uint32_t i = 0; i < GetOutput().size(); i++)  //printing output
+		for (uint32_t i = 0; i < get_output().size(); i++)  //printing output
 		{
-			out_node << GetOutput()[i] << ' ';
+			out_node << get_output()[i] << ' ';
 		}
 		out_node << "\t\t(0 - retreat; 1 - attack)" << endl;
 	}
 	//print type of node
-	out_node << "Node type" << '\t' << GetType() << "\t\t(0 - loyal; 1 - traitor)" << endl;  
+	out_node << "Node type" << '\t' << get_type() << "\t\t(0 - loyal; 1 - traitor)" << endl;  
 	//print majority matrix
 	out_node << "Majority matrix:" << '\n';
 	for (uint32_t i = 0; i < major_matrix.size(); i++)
@@ -91,22 +94,22 @@ void Node::PrintNode()
 	out_node << endl;
 }
 
-void Node::PrintNodeOnScreen()
+void Node::print_node_on_screen()
 {
 	//print number
-	cout << "Node number" << '\t' << GetID() << endl;
+	cout << "Node number" << '\t' << get_id() << endl;
 	//print output only for the commander. we don't care about output of regular nodes
-	if (this->GetIsCommander() == 1)
+	if (this->is_commander() == 1)
 	{
 		cout << "Output value" << '\t';
-		for (uint32_t i = 0; i < GetOutput().size(); i++)  //printing output
+		for (uint32_t i = 0; i < get_output().size(); i++)  //printing output
 		{
-			cout << GetOutput()[i] << ' ';
+			cout << get_output()[i] << ' ';
 		}
 		cout << "\t\t(0 - retreat; 1 - attack)" << endl;
 	}
 	//print type of node
-	cout << "Node type" << '\t' << GetType() << "\t\t(0 - loyal; 1 - traitor)" << endl;
+	cout << "Node type" << '\t' << get_type() << "\t\t(0 - loyal; 1 - traitor)" << endl;
 	//print majority matrix
 	cout << "Majority matrix:" << '\n';
 	for (uint32_t i = 0; i < major_matrix.size(); i++)
@@ -129,69 +132,41 @@ void Node::PrintNodeOnScreen()
 
 uint32_t Node::major_matrix_majority(uint32_t row_number)
 {
-	vector<int32_t> valid_vector;
-	//make a vector without -1
-	bool no_values = true;  //in case that all values in a row equal to -1
-	for (uint32_t i = 0; i < major_matrix[row_number].size(); i++)
-	{
-		if (major_matrix[row_number][i] == -1)
-			continue;
-		no_values = false;
-		valid_vector.push_back(major_matrix[row_number][i]);
-	}
-	if (no_values)
+	vector<int32_t> val_vec = major_matrix[row_number];
+	int value_to_remove = -1;
+	//delete -1 from the vector
+	val_vec.erase(remove(val_vec.begin(), val_vec.end(), value_to_remove), val_vec.end());
+
+	//if deleted all the values
+	if (val_vec.empty())
 		return 999;
 
-	vector<int32_t> check = valid_vector;
-	uint32_t count;
-	for (uint32_t i = 0; i < valid_vector.size(); i++)
-	{
-		count = 1;
-		for (uint32_t j = 0; j < valid_vector.size(); j++)
-		{
-			if (valid_vector[i] == valid_vector[j] && i != j)   //count the number of values
-			{
-				count++;
-			}
-			check[i] = count;
-		}
-		for (uint32_t k = 0; k < i; k++)  //check if this number already been counted
-		{
-			if (valid_vector[i] == valid_vector[k])
-			{
-				check[i] = 0;
-			}
+	map<int, int> hash;
+	//count how many times each value is in the vector and put it to the map
+	for (int i = 0; i < val_vec.size(); i++) {
+		auto it = hash.find(val_vec[i]); //if not found the value return iterator to the end
+		if (it != hash.end())
+			it->second++;
+		hash.emplace(val_vec[i], 1);
+	}
+
+	//searching for the most often value
+	int max = INT16_MIN, key;
+	for (auto it = hash.cbegin(); it != hash.cend(); ++it) {
+		if (it->second > max) {
+			max = it->second;
+			key = it->first;
 		}
 	}
-	int32_t max = check[0];
-	uint32_t point = 0;
-	for (uint32_t i = 1; i < check.size(); i++)   //searching for the most often value
-	{
-		if (check[i] > max)
-		{
-			max = check[i];
-			point = i;
-		}
-	}
-	bool NoMajority = false;
-	for (uint32_t i = 1; i < check.size(); i++)            //check equal number
-	{
-		if (check[i] == check[point] && i != point)
-		{
-			//    cout << "There is no majority " << endl;
-			NoMajority = true;
+
+	//max should be unique, if it is not unique, so there is no majority and we return 0
+	for (auto it = hash.cbegin(); it != hash.cend(); ++it) {
+		if (it->second == max && it->first != key)
 			return 0;
-		}
 	}
-	if (!NoMajority)
-	{
-		return valid_vector[point];
-	}
-	else
-	{
-		return 0;
-	}
+	return key;
 }
+	
 
 void Node::default_value_major_matrix(uint32_t row_number)
 {

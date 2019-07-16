@@ -55,17 +55,17 @@ void checkByzantineGeneral(Network from, uint32_t whereToPrint = 0)  //whereToPr
 	{
 		for (uint32_t i = 0; i < temp_net.GetNumberOfNodes(); i++)
 		{
-			if (temp_net.network[i].GetType() == 0)
+			if (temp_net.network[i].get_type() == 0)
 			{
-				temp_net.network[i].SetType(1);  //make the loyal node traitor
+				temp_net.network[i].set_type(1);  //make the loyal node traitor
 				break;
 			}
 		}
 		for (uint32_t i = 0; i < temp_net.GetNumberOfNodes(); i++)
 		{
-			if (temp_net.network[i].GetIsCommander())
+			if (temp_net.network[i].is_commander())
 			{
-				temp_net.network[i].SetType(0);  //make the commander traitor
+				temp_net.network[i].set_type(0);  //make the commander traitor
 				break;
 			}
 		}
@@ -113,17 +113,17 @@ bool checkByzantineGeneral_noComments(Network from, uint32_t whereToPrint = 0)  
 	{
 		for (uint32_t i = 0; i < temp_net.GetNumberOfNodes(); i++)
 		{
-			if (temp_net.network[i].GetType() == 0)
+			if (temp_net.network[i].get_type() == 0)
 			{
-				temp_net.network[i].SetType(1);  //make the loyal node traitor
+				temp_net.network[i].set_type(1);  //make the loyal node traitor
 				break;
 			}
 		}
 		for (uint32_t i = 0; i < temp_net.GetNumberOfNodes(); i++)
 		{
-			if (temp_net.network[i].GetIsCommander())
+			if (temp_net.network[i].is_commander())
 			{
-				temp_net.network[i].SetType(0);  //make the commander traitor
+				temp_net.network[i].set_type(0);  //make the commander traitor
 				break;
 			}
 		}
@@ -162,16 +162,16 @@ void test_case(uint32_t value)
 				test_net.network[k].resize_major_matrix(test_net.GetNumberOfTraitors() + 1, test_net.GetNumberOfNodes());  
 			}
 			//make the node traitor
-			test_net.network[j].SetType(1);
+			test_net.network[j].set_type(1);
 			test_net.SendMessages(0);
 			for (uint32_t k = 1; k < test_net.GetNumberOfNodes(); k++)
 			{
 			//	for (uint32_t z = 0; z < test_net.GetNumberOfNodes(); z++)
 			//		out << test_net.network[k].major_matrix[0][z] << ", ";
-			//	out << "\t Node type " << test_net.network[k].GetType();
+			//	out << "\t Node type " << test_net.network[k].get_type();
 			//	out << "\t Majority " << test_net.network[k].major_matrix_majority(0);
 			//	out << endl;
-				if (test_net.network[k].GetType() == 0)
+				if (test_net.network[k].get_type() == 0)
 					loyal.network[0].major_matrix[0].push_back(test_net.network[k].major_matrix_majority(0));
 				else
 					traitor.network[0].major_matrix[0].push_back(test_net.network[k].major_matrix_majority(0));
@@ -217,10 +217,10 @@ void test_case(uint32_t value)
 			{
 		/*		for (uint32_t z = 0; z < test_net.GetNumberOfNodes(); z++)
 					out << test_net.network[k].major_matrix[0][z] << ", ";
-				out << "\t Node type " << test_net.network[k].GetType();
+				out << "\t Node type " << test_net.network[k].get_type();
 				out << "\t Majority " << test_net.network[k].major_matrix_majority(0);
 				out << endl;
-		*/		if (test_net.network[k].GetType() == 0)
+		*/		if (test_net.network[k].get_type() == 0)
 					loyal.network[0].major_matrix[0].push_back(test_net.network[k].major_matrix_majority(0));
 				else
 					traitor.network[0].major_matrix[0].push_back(test_net.network[k].major_matrix_majority(0));
@@ -322,7 +322,7 @@ void testing_connectivity(Network net)
 				cout << endl;
 				//goes through the traitors vector and set traitors
 				for (int32_t k = degree - 1; k >= 0; k--)
-					temp_net.network[who_is_traitor[k]].SetType(1);
+					temp_net.network[who_is_traitor[k]].set_type(1);
 				//set the number of traitors in the network
 				temp_net.setNumberOfTraitors(degree);
 				// resize the majority matrices of all nodes according to the number of traitors
@@ -342,7 +342,7 @@ void testing_connectivity(Network net)
 				
 				//make the traitors loyal to make the next check
 				for (int32_t k = degree - 1; k >= 0; k--)
-					temp_net.network[who_is_traitor[k]].SetType(0);
+					temp_net.network[who_is_traitor[k]].set_type(0);
 			}
 		}
 	}
@@ -406,8 +406,8 @@ int main()
 	//create network
 	Network net(size);
 	
-	net.connect_matrix_from_file();
-	testing_connectivity(net);
+	//net.connect_matrix_from_file();
+	//testing_connectivity(net);
 
 	//menu
 	bool Exit = false;

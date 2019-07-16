@@ -15,7 +15,6 @@ class Network
 public:
 	std::vector<Node> network;  //array of nodes
 	std::vector<std::vector<uint32_t>>  connect_matrix;  //connectivity matrix to detect connectivity of each node
-	Network();
 	Network(uint32_t number_of_nodes);					
 	void resizeNetwork(uint32_t value);			//edit the current network and make it with a new number of nodes
 	uint32_t getMessage();						//get the original message of the network
