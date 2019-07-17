@@ -28,6 +28,8 @@ public:
 	uint32_t GetNumberOfTraitors();				//get number of traitors in the network
 	void PrintNetwork();						//print every node in the network to the file
 	void PrintNetworkOnScreen();				//print every node in the network to the screen
+	void send_messages_recursive(uint32_t mes, uint32_t sender_id);
+	uint32_t node_respond(uint32_t mes, uint32_t node_number, uint32_t number_of_traitors, uint32_t sender_id);
 	void SendMessages(uint32_t value); // send messages to the network; if value == 0 user define the message; else - send "value" to network
 	void low_level_send_mes(uint32_t sending_mes, std::vector<uint32_t>  who_is_commander); //sending messages between nodes on the lowest level
 	void set_majority(std::vector<uint32_t> who_is_commander, uint32_t level, uint32_t column);		//set the majority of the particular level of majority matrix
@@ -39,6 +41,7 @@ public:
 	std::vector<uint32_t> shortest_path(uint32_t src, uint32_t dst); //define the shortest path for sending messages
 	bool traitors_in_vector (std::vector<uint32_t> vector); //true if there is a traitors in any of the vector (for instance shortest path vector or who is commander vector)
 	bool checkByzantine(uint32_t withConsoleMessages, uint32_t printInFile); //check current state of network (print message on console or in file)
+	bool check_Byzantine_from_recursive();
 	~Network();
 };
 #endif // NETWORK_H

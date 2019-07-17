@@ -14,6 +14,7 @@ Node::Node()
 	output_value.push_back(999);
 	commander = false;
 	type = 0;
+	is_sending = false;
 }
 
 uint32_t Node::get_id()
@@ -36,10 +37,20 @@ bool Node::is_commander()
 	return commander;
 }
 
+bool Node::get_is_sending()
+{
+	return is_sending;
+}
+
 
 void Node::set_commander(bool value)
 {
 	commander = value;
+}
+
+void Node::set_is_sending(bool value)
+{
+	is_sending = value;
 }
 
 vector<uint32_t> Node::get_output()
@@ -47,9 +58,19 @@ vector<uint32_t> Node::get_output()
 	return output_value;
 }
 
+std::vector<uint32_t> Node::get_input()
+{
+	return input;
+}
+
 void Node::set_output(uint32_t value)
 {
 	output_value.assign(1, value);  // insert value instead default value
+}
+
+void Node::set_input(uint32_t value)
+{
+	input.push_back(value);
 }
 
 void Node::set_type(uint32_t value)
@@ -166,6 +187,57 @@ uint32_t Node::major_matrix_majority(uint32_t row_number)
 	}
 	return key;
 }
+
+uint32_t Node::input_majority(vector<uint32_t> val_vec)
+{
+	int value_to_remove = -1;
+
+	//if deleted all the values
+	if (val_vec.empty())
+		return 999;
+
+	map<int, int> hash;
+	//count how many times each value is in the vector and put it to the map
+	for (int i = 0; i < val_vec.size(); i++) {
+		auto it = hash.find(val_vec[i]); //if not found the value return iterator to the end
+		if (it != hash.end())
+			it->second++;
+		hash.emplace(val_vec[i], 1);
+	}
+
+	//searching for the most often value
+	int max = INT16_MIN, key;
+	for (auto it = hash.cbegin(); it != hash.cend(); ++it) {
+		if (it->second > max) {
+			max = it->second;
+			key = it->first;
+		}
+	}
+
+	//max should be unique, if it is not unique, so there is no majority and we return 0
+	for (auto it = hash.cbegin(); it != hash.cend(); ++it) {
+		if (it->second == max && it->first != key)
+			return 0;
+	}
+	return key;
+}
+
+void Node::set_default_input(uint32_t mes)
+{
+	input.assign(1, mes);
+}
+
+void Node::input_clear()
+{
+	input.clear();
+}
+
+void Node::output_clear()
+{
+	output_value.clear();
+}
+
+
 	
 
 void Node::default_value_major_matrix(uint32_t row_number)

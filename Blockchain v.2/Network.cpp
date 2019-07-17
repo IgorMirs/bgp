@@ -10,20 +10,7 @@ extern ofstream out;
 extern ofstream out_node;
 ifstream fin;
 
-Network::Network(uint32_t number_of_nodes = 1)
-{
-	network.resize(number_of_nodes);   //make size of array of Nodes equals N, avoid to have memory lost
-	SetNumberOfNodes(number_of_nodes);
-	resize_connect_matrix(number_of_nodes);
-	for (uint32_t i = 0; i < number_of_nodes; i++)
-	{
-		network[i].set_id(i);   //set id from 0 to N-1
-		network[i].resize_major_matrix(1, number_of_nodes); //resize the majority matrix
-	}
-	network[0].set_commander(true);  //Node with 0 ID became commander
-}
-
-void Network::resizeNetwork(uint32_t value)
+Network::Network(uint32_t value = 1)
 {
 	network.resize(value);   //make size of array of Nodes equals N, avoid to have memory lost
 	SetNumberOfNodes(value);
@@ -38,6 +25,22 @@ void Network::resizeNetwork(uint32_t value)
 	network[0].set_commander(true);  //Node with 0 ID became commander
 	setMessage(999);   //set message to the default value
 }
+
+/*void Network::resizeNetwork(uint32_t value)
+{
+	network.resize(value);   //make size of array of Nodes equals N, avoid to have memory lost
+	SetNumberOfNodes(value);
+	setNumberOfTraitors(0);
+	resize_connect_matrix(value);
+	for (uint32_t i = 0; i < value; i++)
+	{
+		network[i].set_id(i);   //set id from 0 to N-1
+		network[i].set_type(0);
+		network[i].resize_major_matrix(1, value);
+	}
+	network[0].set_commander(true);  //Node with 0 ID became commander
+	setMessage(999);   //set message to the default value
+}*/
 
 uint32_t Network::getMessage()
 {
@@ -169,6 +172,91 @@ void Network::PrintNetworkOnScreen()
 	{
 		network[i].print_node_on_screen();
 	}
+}
+
+
+
+void Network::send_messages_recursive(uint32_t mes = 100, uint32_t sender_id = 0)
+{
+	uint32_t fake_mes, cur_mes;
+	bool messageEnteredByUser = false;
+	//input value 100 means that the message will be entered by user
+	if (mes == 100)
+	{
+		messageEnteredByUser = true;
+		cout << "Enter message (0 - retreat; 1 - attack)" << endl << "> ";
+		cin >> mes;
+		cout << endl;
+		setMessage(mes);    //the original message in network
+		fake_mes = make_fake_mes(mes); //making fake message opposite to real message
+	}
+	else
+	{
+		setMessage(mes);    //the original message in network
+		fake_mes = make_fake_mes(mes); //making fake message opposite to real message
+	}
+
+	if (network[sender_id].get_type() == 1)
+		cur_mes = fake_mes;
+	else
+		cur_mes = mes;
+
+	network[sender_id].set_is_sending(true);
+
+	//clear the input vectors of all the nodes
+	for (uint32_t i = 0; i < network.size(); i++)
+		network.at(i).input_clear();
+
+	//send the message from the sender to all other nodes
+	for (uint32_t i = 0; i < network.size(); i++) {
+		if (network[i].get_is_sending())
+			continue;
+			network[i].set_input(cur_mes);
+	}
+
+	//set output of the sender
+	network[sender_id].set_output(cur_mes);
+	
+	for (uint32_t i = 0; i < network.size(); i++) {
+		if (network[i].get_is_sending())
+			continue;
+		network.at(sender_id).set_input(node_respond(cur_mes, i, this->GetNumberOfTraitors(), sender_id));
+	}
+	//here the sender get the result
+	network[sender_id].set_is_sending(false);
+	cout << "Result input:" << endl;
+	for (uint32_t i = 0; i < network.at(sender_id).get_input().size(); i++)
+		cout << network.at(sender_id).get_input()[i] << ' ';
+
+	cout << endl << "Sender output: " << endl;
+	for (uint32_t i = 0; i < network.at(sender_id).get_output().size(); i++)
+		cout << network.at(sender_id).get_output()[i] << ' ';
+	cout << endl << "----------------------------------------" << endl;
+}
+
+uint32_t Network::node_respond(uint32_t mes, uint32_t node_number, uint32_t number_of_traitors, uint32_t sender_id)
+{
+	//returns the node's respond with the node's decision (mes - send
+	if (network.at(node_number).get_type() == 1) {
+		if (network[sender_id].get_type() == 1)
+			return mes;
+		else
+			return make_fake_mes(mes);
+	}
+
+	if (number_of_traitors == 0)
+		return network[node_number].input_majority(network[node_number].get_input());
+
+	for (uint32_t i = 0; i < network.size(); i++) {
+		if (i == node_number || network[i].get_is_sending())
+			continue;
+		network[node_number].set_is_sending(true);
+		network[node_number].set_input(node_respond(mes, i, number_of_traitors - 1, sender_id));
+		network[node_number].set_is_sending(false);
+	}
+	uint32_t result = network[node_number].input_majority(network[node_number].get_input());
+	network[node_number].set_default_input(mes);
+	return result;
 }
 
 void Network::SetNumberOfNodes(uint32_t value)
@@ -964,6 +1052,14 @@ bool Network::checkByzantine(uint32_t withConsoleMessages = 0, uint32_t printInF
 		return 1;
 	}
 
+}
+
+bool Network::check_Byzantine_from_recursive()
+{
+	if (network[0].input_majority(network[0].get_input()) != network[0].input_majority(network[0].get_output()))
+		return false;
+	else
+		return true;
 }
 
 

@@ -1,0 +1,582 @@
+Current traitors are:		1 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		5 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 5 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 4 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 5 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 4 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 5 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		3 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 5 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		4 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		5 6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		5 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		5 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		5 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		5 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		5 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		5 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		5 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		5 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		6 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		6 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		6 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		6 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		6 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		6 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		6 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		6 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		7 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		7 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		7 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		7 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		7 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		7 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		7 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		8 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		8 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		8 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		8 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		8 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		8 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		9 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		9 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		9 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		9 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		9 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		10 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		10 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		10 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		10 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		11 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		11 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		11 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		12 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		12 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		13 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 3 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 4 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 5 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 2 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 4 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 5 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 3 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 5 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 4 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 5 6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 5 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 5 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 5 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 5 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 5 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 5 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 5 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 5 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 6 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 6 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 6 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 6 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 6 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 6 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 6 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 6 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 7 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 7 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 7 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 7 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 7 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 7 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 7 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 8 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 8 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 8 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 8 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 8 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 8 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 9 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 9 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 9 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 9 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 9 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 10 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 10 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 10 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 10 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 11 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 11 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 11 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 12 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 12 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		1 13 14 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 4 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 5 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 6 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 7 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 8 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 9 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 10 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 11 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 12 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 13 
+Solution (1 - found; 0 - not found)	1
+
+Current traitors are:		2 3 14 
+Solution (1 - found; 0 - not found)	1
+

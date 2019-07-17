@@ -28,72 +28,89 @@ int menu_item()
 	return variant;
 }
 
+bool check_recursive_sending(Network *from) {
+	if (from->getMessage() == 999)
+	{
+		cout << "CAN'T CHECK! YOU DID NOT SEND ANY MESSAGE." << endl;
+		return false;
+	}
+	if (!from->check_Byzantine_from_recursive())
+		return false;
 
-void checkByzantineGeneral(Network from, uint32_t whereToPrint = 0)  //whereToPrint (0 - in file; 1 - to the console)
+	uint32_t fake_mes = from->make_fake_mes(from->getMessage());
+
+	from->send_messages_recursive(fake_mes, 0);
+	if (!from->check_Byzantine_from_recursive())
+		return false;
+
+	return true;
+}
+
+void checkByzantineGeneral(Network *from, uint32_t whereToPrint = 0)  //whereToPrint (0 - in file; 1 - to the console)
 {
-	Network temp_net = from;    //create a new network for checking with the opposite message
+	Network *temp_net = from;    //create a new network for checking with the opposite message
 	uint32_t opposite_mes;
-	if (from.getMessage() == 999)
+	if (from->getMessage() == 999)
 	{
 		cout << "CAN'T CHECK! YOU DID NOT SEND ANY MESSAGE." << endl;
 		return;
 	}
-	if (!temp_net.checkByzantine(0, 0))  //check that even without changing messages and nodes solution not found
+	if (!temp_net->checkByzantine(0, 0))  //check that even without changing messages and nodes solution not found
 	{
 		if (whereToPrint != 0)
 		{
-			temp_net.checkByzantine(1, 0);
+			temp_net->checkByzantine(1, 0);
 		}
 		else
 		{
-			temp_net.checkByzantine(0, 1);
+			temp_net->checkByzantine(0, 1);
 		}
 		return;
 	}
 
-	if (!from.isCommanderLoyal())    // if the commander traitor we should make it loyal and make one loyal node traitor
+	if (!from->isCommanderLoyal())    // if the commander traitor we should make it loyal and make one loyal node traitor
 	{
-		for (uint32_t i = 0; i < temp_net.GetNumberOfNodes(); i++)
+		for (uint32_t i = 0; i < temp_net->GetNumberOfNodes(); i++)
 		{
-			if (temp_net.network[i].get_type() == 0)
+			if (temp_net->network[i].get_type() == 0)
 			{
-				temp_net.network[i].set_type(1);  //make the loyal node traitor
+				temp_net->network[i].set_type(1);  //make the loyal node traitor
 				break;
 			}
 		}
-		for (uint32_t i = 0; i < temp_net.GetNumberOfNodes(); i++)
+		for (uint32_t i = 0; i < temp_net->GetNumberOfNodes(); i++)
 		{
-			if (temp_net.network[i].is_commander())
+			if (temp_net->network[i].is_commander())
 			{
-				temp_net.network[i].set_type(0);  //make the commander traitor
+				temp_net->network[i].set_type(0);  //make the commander traitor
 				break;
 			}
 		}
-		temp_net.SendMessages(from.getMessage());
-		if (!temp_net.checkByzantine(0, 0))  //checking after changing nodes but still without changing message
+		temp_net->SendMessages(from->getMessage());
+		if (!temp_net->checkByzantine(0, 0))  //checking after changing nodes but still without changing message
 		{
 			if (whereToPrint != 0)
 			{
-				temp_net.checkByzantine(1, 0);
+				temp_net->checkByzantine(1, 0);
 			}
 			else
 			{
-				temp_net.checkByzantine(0, 1);
+				temp_net->checkByzantine(0, 1);
 			}
 			return;
 		}
 	}
 
-	if (from.getMessage() == 0) { opposite_mes = 1; }  //making opposite message to real message
+	if (from->getMessage() == 0) { opposite_mes = 1; }  //making opposite message to real message
 	else { opposite_mes = 0; }
-	temp_net.SendMessages(opposite_mes);
+	temp_net->SendMessages(opposite_mes);
 	if (whereToPrint != 0)
 	{
-		temp_net.checkByzantine(1, 0);
+		temp_net->checkByzantine(1, 0);
 	}
 	else
 	{
-		temp_net.checkByzantine(0, 1);
+		temp_net->checkByzantine(0, 1);
 	}
 }
 
@@ -152,7 +169,7 @@ void test_case(uint32_t value)
 	for (uint32_t i = 3; i <= value; i++)
 	{
 		
-		test_net.resizeNetwork(i);
+		//test_net.resizeNetwork(i);
 		for (uint32_t j = 1; j < test_net.GetNumberOfNodes(); j++)
 		{
 			test_net.setNumberOfTraitors(j);
@@ -270,25 +287,25 @@ uint32_t setSizeOfNetwork()
 	return value;
 }
 
-void testing(Network net)
+void testing(Network *net)
 {
-	Network temp_net = net;
-	temp_net.setTraitors();
+	Network *temp_net = net;
+	temp_net->setTraitors();
 	cout << endl << "SENDING MESSAGE IS 0" << endl;
-	temp_net.SendMessages(0);
+	temp_net->SendMessages(0);
 	checkByzantineGeneral(temp_net, 1);
 	cout << endl << "--------------------------------------------------------------------------" << endl;
 	cout << endl << "SENDING MESSAGE IS 1" << endl;
-	temp_net.SendMessages(1);
+	temp_net->SendMessages(1);
 	checkByzantineGeneral(temp_net, 1);
 	cout << endl << "--------------------------------------------------------------------------" << endl;
 }
 
-void testing_connectivity(Network net)
+void testing_connectivity(Network *net)
 {
-	Network temp_net = net;
+	Network *temp_net = net;
 	out.open("Test_nodes_connectivity.txt");
-	uint32_t base = temp_net.GetNumberOfNodes();
+	uint32_t base = temp_net->GetNumberOfNodes();
 	for (uint32_t counter = 1; counter < base - 1; counter++)  // create a counter which goes from one traitor in the network to N-1 traitors
 	{
 		uint32_t degree = counter;  //current number of traitors
@@ -322,14 +339,14 @@ void testing_connectivity(Network net)
 				cout << endl;
 				//goes through the traitors vector and set traitors
 				for (int32_t k = degree - 1; k >= 0; k--)
-					temp_net.network[who_is_traitor[k]].set_type(1);
+					temp_net->network[who_is_traitor[k]].set_type(1);
 				//set the number of traitors in the network
-				temp_net.setNumberOfTraitors(degree);
+				temp_net->setNumberOfTraitors(degree);
 				// resize the majority matrices of all nodes according to the number of traitors
-				for (uint32_t j = 0; j < temp_net.GetNumberOfNodes(); j++)
-					temp_net.network[j].resize_major_matrix(temp_net.GetNumberOfTraitors() + 1, temp_net.GetNumberOfNodes());
+				for (uint32_t j = 0; j < temp_net->GetNumberOfNodes(); j++)
+					temp_net->network[j].resize_major_matrix(temp_net->GetNumberOfTraitors() + 1, temp_net->GetNumberOfNodes());
 
-				temp_net.SendMessages(0);
+				temp_net->SendMessages(0);
 				out << "Current traitors are:\t\t";
 				for (int32_t k = degree - 1; k >= 0; k--)
 				{
@@ -338,11 +355,78 @@ void testing_connectivity(Network net)
 				out << endl;
 
 				//checking the solution
-				out << "Solution (1 - found; 0 - not found)\t" << checkByzantineGeneral_noComments(temp_net, 0) << endl << endl;
+				out << "Solution (1 - found; 0 - not found)\t" << checkByzantineGeneral_noComments(*temp_net, 0) << endl << endl;
 				
 				//make the traitors loyal to make the next check
 				for (int32_t k = degree - 1; k >= 0; k--)
-					temp_net.network[who_is_traitor[k]].set_type(0);
+					temp_net->network[who_is_traitor[k]].set_type(0);
+			}
+		}
+	}
+	out << endl << "--------------------------------------------------------------------------" << endl;
+	out.close();
+}
+
+void testing_connectivity_recursive(Network* net)
+{
+	Network* temp_net = net;
+	out.open("Test_nodes_connectivity_recursive.txt");
+	uint32_t base = temp_net->GetNumberOfNodes();
+	for (uint32_t counter = 1; counter < base - 2; counter++)  // create a counter which goes from one traitor in the network to N-1 traitors
+	{
+		uint32_t degree = counter;  //current number of traitors
+		int total = pow(base, degree);
+		for (uint32_t i = 1; i < total; i++)
+		{
+			vector <uint32_t> who_is_traitor(degree);
+			uint32_t buffer = i;
+			bool exit = false;
+			for (uint32_t j = 0; j < degree; j++)  //in this loop getting the unique combination of traitors ( for instance 3 traitors - combination is 1, 2, 3)
+			{
+				if (exit)
+					break;
+				who_is_traitor[j] = buffer % base;
+				//check if all the combination passed with the highest commander
+				for (uint32_t z = 0; z < j; z++)
+					if (who_is_traitor[z] <= who_is_traitor[j] || who_is_traitor[j] == 0)
+					{
+						exit = true;
+						break;
+					}
+				buffer /= base;
+			}
+			if (!exit)
+			{
+				//print vector with traitors
+				cout << endl;
+				for (int32_t k = degree - 1; k >= 0; k--)
+				{
+					cout << who_is_traitor[k] << " ";
+				}
+				cout << endl;
+				//goes through the traitors vector and set traitors
+				for (int32_t k = degree - 1; k >= 0; k--)
+					temp_net->network[who_is_traitor[k]].set_type(1);
+				//set the number of traitors in the network
+				temp_net->setNumberOfTraitors(degree);
+				// resize the majority matrices of all nodes according to the number of traitors
+				/*for (uint32_t j = 0; j < temp_net->GetNumberOfNodes(); j++)
+					temp_net->network[j].resize_major_matrix(temp_net->GetNumberOfTraitors() + 1, temp_net->GetNumberOfNodes());
+*/
+				temp_net->send_messages_recursive(0, 0);
+				out << "Current traitors are:\t\t";
+				for (int32_t k = degree - 1; k >= 0; k--)
+				{
+					out << who_is_traitor[k] << " ";
+				}
+				out << endl;
+
+				//checking the solution
+				out << "Solution (1 - found; 0 - not found)\t" << check_recursive_sending(temp_net) << endl << endl;
+
+				//make the traitors loyal to make the next check
+				for (int32_t k = degree - 1; k >= 0; k--)
+					temp_net->network[who_is_traitor[k]].set_type(0);
 			}
 		}
 	}
@@ -376,16 +460,16 @@ void location(uint32_t t, uint32_t degree) //finding the unique location of the 
 		}
 }
 
-void test_nodes_location(Network net)
+void test_nodes_location(Network *net)
 {
-	uint32_t degree = net.GetNumberOfNodes() - 1;
+	uint32_t degree = net->GetNumberOfNodes() - 1;
 	a.resize(degree);
 	b.resize(degree);
 	out.open("Test_nodes_location.txt");
 	location(0, degree);
 	for (uint32_t i = 0; i < matrix.size(); i++)
 	{
-		net.connect_matrix_from_file2(matrix[i]);
+		net->connect_matrix_from_file2(matrix[i]);
 		out << "Current nodes location (from top to bottom, from left to right):" << endl;
 		for (uint32_t j = 0; j < matrix[i].size(); j++)
 			out << matrix[i][j];
@@ -401,13 +485,11 @@ int main()
 	//file where we put all the steps of sending messages
 	out_node.open("Test_case.txt");
 
-	//get the size of the network
-	uint32_t size = setSizeOfNetwork();
 	//create network
-	Network net(size);
+	Network *net = new Network(setSizeOfNetwork());
 	
 	//net.connect_matrix_from_file();
-	//testing_connectivity(net);
+	//testing_connectivity_recursive(net);
 
 	//menu
 	bool Exit = false;
@@ -416,11 +498,12 @@ int main()
 		char Control = menu_item();
 		switch (Control)
 		{
-		case '1': {net.PrintNetworkOnScreen(); break; }
-		case '2': {net.SendMessages(100); break; }
-		case '3': {net.setTraitors(); break; }
+		case '1': {net->PrintNetworkOnScreen(); break; }
+		case '2': {net->send_messages_recursive(100, 0); break; }
+		case '3': {net->setTraitors(); break; }
 		case '4': {checkByzantineGeneral(net, 1); break; }
-		case '5': {cout << endl; net.resizeNetwork(setSizeOfNetwork()); break; }
+		case '5': {cout << endl; delete net; 
+					Network *net = new Network(setSizeOfNetwork()); break; }
 		case '6': {testing_connectivity(net); break; }
 		case '0': {Exit = true; out_node.close(); break; }
 		default: {cout << "There is no such action!" << endl; break; }
