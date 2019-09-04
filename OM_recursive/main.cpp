@@ -179,25 +179,7 @@ int main(int argc, const char* argv[]) {
 	net->connect_matrix.connect_matrix_from_file();
 	pr->print_connect_matrix(&net->connect_matrix);
 
-	//testing_connectivity_recursive(net);
-
-
-	//test**************************
-	/*for (uint32_t i = 0; i < net->connect_matrix.connect_matrix.size(); i++) {
-		for (uint32_t j = 0; j < net->connect_matrix.connect_matrix.size(); j++) {
-			if (i == j)
-				continue;
-			vector<uint32_t> path = net->connect_matrix.shortest_path(i, j);
-
-			cout << "The shortest path from " << i << " to " << j << " through" << endl;
-			if (path.empty())
-				cout << "Nodes connected";
-			else
-				for (uint32_t z = 0; z < path.size(); z++)
-					cout << net->connect_matrix.shortest_path(i, j)[z] << ' ';
-			cout << endl;
-		}
-	}*/
+	//starting working on signed messages
 	
 	//menu
 	bool Exit = false;
