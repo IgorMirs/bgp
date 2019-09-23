@@ -2,12 +2,13 @@
 #include <iostream>
 #include <vector>
 #include <iterator>
+#include "Message.h"
 #ifndef NODE_H
 #define NODE_H
 
 class Node
 {
-	std::vector<uint32_t> output_value;
+	Message output_value;
 	std::vector<uint32_t> input;
 	uint32_t ID{ 0 };                                    //node id (number)
 	bool commander{ false };                                    //1 - commander
@@ -16,6 +17,9 @@ class Node
 	uint32_t node_decision{ 999 };                        //1 - node decides to attack; 0 - retreat
 
 public:
+	std::vector<Message> mes_vec;
+
+
 	std::vector<std::vector<int32_t>>  major_matrix;  //matrix for finding majority
 
 	//constructor
@@ -31,14 +35,14 @@ public:
 	bool get_is_sending() { return is_sending; }
 	void set_commander(bool value) { commander = value; }            //make the node commander.
 	void set_is_sending(bool value) { is_sending = value; }
-	std::vector <uint32_t> get_output() { return output_value; }            //get output vector of the node
+	uint32_t get_output() { return output_value.get_mes(); }            //get output vector of the node
 	std::vector<uint32_t> get_input() { return input; }
-	void set_output(uint32_t value) { output_value.assign(1, value); }  //put the value to the output vector of the node
+	void set_output(uint32_t value) { output_value.create_mes(value); }  //put the value to the output vector of the node
 	void set_input(uint32_t value) { input.push_back(value); }
 	void set_type(uint32_t value) { type = value; }                //0 - loyal; 1 - traitor
 	void set_default_input(uint32_t mes) { input.assign(1, mes); }
 	void input_clear() { input.clear(); }
-	void output_clear() { output_value.clear(); }
+	void output_clear() { output_value.clear_mes(); }
 	uint32_t get_node_decision() { return node_decision; }
 	void set_node_decision(uint32_t value) { node_decision = value; }
 

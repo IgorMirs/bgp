@@ -11,7 +11,7 @@ ofstream out_node;
 Node::Node(uint32_t id_value, uint32_t output, bool is_commander_value, uint32_t type_value, bool is_sending_value, uint32_t node_decision_value)
 {
 	set_id(id_value);
-	output_value.push_back(output);
+	output_value.create_mes(output);
 	set_commander(is_commander_value);
 	set_type(type_value);
 	set_is_sending(is_sending_value);
@@ -22,7 +22,6 @@ Node::Node(uint32_t id_value, uint32_t output, bool is_commander_value, uint32_t
 
 uint32_t Node::input_majority(vector<uint32_t> val_vec)
 {
-
 	//if deleted all the values
 	if (val_vec.empty())
 		return 999;

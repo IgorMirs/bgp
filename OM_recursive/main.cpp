@@ -7,6 +7,7 @@
 #include "Node.h"
 #include "Network.h"
 #include "Print.h"
+#include "Message.h"
 
 using namespace std;
 
@@ -32,7 +33,7 @@ char menu_item()
 }
 
 bool check_recursive_sending(Network* from) {
-	if (from->getMessage() == 999)
+	if (from->message.get_mes() == 999)
 	{
 		cout << "CAN'T CHECK! YOU DID NOT SEND ANY MESSAGE." << endl;
 		return false;
@@ -40,7 +41,7 @@ bool check_recursive_sending(Network* from) {
 	if (!from->check_Byzantine_from_recursive())
 		return false;
 
-	uint32_t fake_mes = from->make_fake_mes(from->getMessage());
+	uint32_t fake_mes = from->make_fake_mes(from->message.get_mes());
 
 	from->send_messages_recursive(0,fake_mes);
 	if (!from->check_Byzantine_from_recursive())
@@ -173,7 +174,7 @@ int main(int argc, const char* argv[]) {
 	//out_node.open("Test_case.txt");
 
 	//create network and print class object
-	Network* net = new Network(6);
+	Network* net = new Network(setSizeOfNetwork());
 	Print* pr = new Print();
 
 	net->connect_matrix.connect_matrix_from_file();

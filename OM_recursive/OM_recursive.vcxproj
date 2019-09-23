@@ -125,12 +125,14 @@
   <ItemGroup>
     <ClCompile Include="Connectivity_matrix.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Message.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Print.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Connectivity_matrix.h" />
+    <ClInclude Include="Message.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Print.h" />

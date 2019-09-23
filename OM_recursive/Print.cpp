@@ -12,11 +12,11 @@ void Print::print_node_in_file(Node* node)
 	if (node->is_commander() == 1)
 	{
 		out_node << "Output value" << '\t';
-		vector<uint32_t> output = node->get_output();
-		for (uint32_t i = 0; i < output.size(); i++)  //printing output
-		{
-			out_node << output[i] << ' ';
-		}
+		//vector<uint32_t> output = node->get_output();
+		//for (uint32_t i = 0; i < output.size(); i++)  //printing output
+		//{
+			out_node << node->get_output() << ' ';
+		//}
 		out_node << "\t\t(0 - retreat; 1 - attack)" << endl;
 	}
 	//print type of node
@@ -48,11 +48,11 @@ void Print::print_node_on_screen(Node* node)
 	if (node->is_commander() == 1)
 	{
 		cout << "Output value" << '\t';
-		vector<uint32_t> output = node->get_output();
-		for (uint32_t i = 0; i < output.size(); i++)  //printing output
-		{
-			cout << output[i] << ' ';
-		}
+		uint32_t output = node->get_output();
+		//for (uint32_t i = 0; i < output.size(); i++)  //printing output
+		//{
+			cout << output << ' ';
+		//}
 		cout << "\t\t(0 - retreat; 1 - attack)" << endl;
 	}
 	//print type of node
@@ -66,7 +66,7 @@ void Print::print_node_on_screen(Node* node)
 
 void Print::print_network_in_file(Network* net)
 {
-	out_node << endl << "The CURRENT MESSAGE in the network is " << net->getMessage() << endl << endl;
+	out_node << endl << "The CURRENT MESSAGE in the network is " << net->message.get_mes() << endl << endl;
 	for (uint32_t i = 0; i < net->network.size(); i++)
 	{
 		print_node_in_file(&net->network[i]);
@@ -75,7 +75,7 @@ void Print::print_network_in_file(Network* net)
 
 void Print::print_network_on_screen(Network* net)
 {
-	cout << endl << "The CURRENT MESSAGE in the network is " << net->getMessage() << endl << endl;
+	cout << endl << "The CURRENT MESSAGE in the network is " << net->message.get_mes() << endl << endl;
 	print_connect_matrix(&net->connect_matrix);
 	for (uint32_t i = 0; i < net->network.size(); i++)
 	{
