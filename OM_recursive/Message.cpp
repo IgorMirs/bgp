@@ -29,3 +29,15 @@ uint32_t Message::get_mes()
 {
 	return mes.at(0);
 }
+
+
+void Message::set_mes(Message message)
+{
+	mes.clear();
+	mes.insert(std::begin(mes), std::begin(message.mes), std::end(message.mes));
+}
+
+Message Message::get_message()
+{
+	return *this;
+}

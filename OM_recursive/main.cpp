@@ -50,6 +50,24 @@ bool check_recursive_sending(Network* from) {
 	return true;
 }
 
+bool check_signed_sending(Network* from) {
+	if (from->message.get_mes() == 999)
+	{
+		cout << "CAN'T CHECK! YOU DID NOT SEND ANY MESSAGE." << endl;
+		return false;
+	}
+	if (!from->check_Byzantine_signed_mes())
+		return false;
+
+	uint32_t fake_mes = from->make_fake_mes(from->message.get_mes());
+
+	from->signed_messages(0, fake_mes);
+	if (!from->check_Byzantine_signed_mes())
+		return false;
+
+	return true;
+}
+
 
 
 uint32_t setSizeOfNetwork()
@@ -141,6 +159,70 @@ void testing_connectivity_recursive(Network* net)
 	out.close();
 }
 
+void testing_connectivity_signed(Network* net)
+{
+	Network* temp_net = net;
+	out.open("Test_nodes_connectivity_signed.txt");
+	uint32_t base = temp_net->get_number_of_nodes();
+	for (uint32_t counter = 1; counter < base; counter++)  // create a counter which goes from one traitor in the network to N-1 traitors
+	{
+		uint32_t degree = counter;  //current number of traitors
+		uint32_t total = (int)pow(base, degree);
+		for (uint32_t i = 1; i < total; i++)
+		{
+			vector <uint32_t> who_is_traitor(degree);
+			uint32_t buffer = i;
+			bool exit = false;
+			for (uint32_t j = 0; j < degree; j++)  //in this loop getting the unique combination of traitors ( for instance 3 traitors - combination is 1, 2, 3)
+			{
+				if (exit)
+					break;
+				who_is_traitor[j] = buffer % base;
+				//check if all the combination passed with the highest commander
+				for (uint32_t z = 0; z < j; z++)
+					if (who_is_traitor[z] <= who_is_traitor[j] || who_is_traitor[j] == 0)
+					{
+						exit = true;
+						break;
+					}
+				buffer /= base;
+			}
+			if (!exit)
+			{
+				//print vector with traitors
+				cout << endl;
+				for (int32_t k = degree - 1; k >= 0; k--)
+				{
+					cout << who_is_traitor[k] << " ";
+				}
+				cout << endl;
+				//goes through the traitors vector and set traitors
+				for (int32_t k = degree - 1; k >= 0; k--)
+					temp_net->network[who_is_traitor[k]].set_type(1);
+				//set the number of traitors in the network
+				temp_net->set_number_of_traitors(degree);
+				
+				temp_net->signed_messages(0,0);
+				out << "Current traitors are:\t\t";
+				for (int32_t k = degree - 1; k >= 0; k--)
+				{
+					out << who_is_traitor[k] << " ";
+				}
+				out << endl;
+
+				//checking the solution
+				out << "Solution (1 - found; 0 - not found)\t" << check_signed_sending(temp_net) << endl << endl;
+
+				//make the traitors loyal to make the next check 
+				for (int32_t k = degree - 1; k >= 0; k--)
+					temp_net->network[who_is_traitor[k]].set_type(0);
+			}
+		}
+	}
+	out << endl << "--------------------------------------------------------------------------" << endl;
+	out.close();
+}
+
 //global variables for finding the unique locations of the nodes in the network
 vector <bool> a;
 vector <uint32_t> b;
@@ -177,11 +259,12 @@ int main(int argc, const char* argv[]) {
 	Network* net = new Network(setSizeOfNetwork());
 	Print* pr = new Print();
 
-	net->connect_matrix.connect_matrix_from_file();
+	//net->connect_matrix.connect_matrix_from_file();
 	pr->print_connect_matrix(&net->connect_matrix);
 
 	//starting working on signed messages
-	
+	testing_connectivity_signed(net);
+
 	//menu
 	bool Exit = false;
 	do

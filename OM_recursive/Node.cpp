@@ -18,7 +18,25 @@ Node::Node(uint32_t id_value, uint32_t output, bool is_commander_value, uint32_t
 	set_node_decision(node_decision_value);
 }
 
-
+void Node::receive_mes(Message mes) {
+	//if the node has no messages in his input vector - he add the message
+	if (this->input.empty())
+		this->set_input(mes);
+	else
+	{
+		bool uniq_mes = true;
+		//check if received message is already in the input vector
+		//if yes - do not receive such message
+		for (uint32_t i = 0; i < this->input.size(); i++) {
+			if (mes.get_mes() == input.at(i).get_mes()) {
+				uniq_mes = false;
+				break;
+			}
+		}
+		if (uniq_mes)
+			this->set_input(mes);
+	}
+}
 
 uint32_t Node::input_majority(vector<uint32_t> val_vec)
 {

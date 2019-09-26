@@ -12,6 +12,10 @@ public:
 	void print_mes();
 	void clear_mes();
 	uint32_t get_mes();
+	void set_mes(Message message);
+	Message get_message();
+
+
 };
 
 #endif // MESSAGE_H

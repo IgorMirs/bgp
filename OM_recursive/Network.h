@@ -46,9 +46,10 @@ public:
 	void send_messages_recursive(bool entered_by_user = false, uint32_t mes = 999, uint32_t sender_id = 0);
 
 	void signed_messages(bool entered_by_user = false, uint32_t mes = 999, uint32_t sender_id = 0);
-
+	void send_between(Message mes, uint32_t node_number = 0);
 	bool traitors_in_vector(std::vector<uint32_t> vector); //true if there is a traitors in any of the vector (for instance shortest path vector or who is commander vector)
 	bool check_Byzantine_from_recursive();
+	bool check_Byzantine_signed_mes();
 	~Network();
 };
 #endif // NETWORK_H

@@ -178,9 +178,9 @@ void Network::send_messages_recursive(bool entered_by_user, uint32_t mes,  uint3
 	//set output of the sender
 	//if the sender traitor - send the opposite message
 	if (network[sender_id].get_type() == 0)
-		network[sender_id].set_output(message.get_mes());
-	else
-		network[sender_id].set_output(fake_mes.get_mes());
+//		network[sender_id].set_output(message.get_mes());
+//	else
+//		network[sender_id].set_output(fake_mes.get_mes());
 	
 	//make the sender sending
 	network[sender_id].set_is_sending(true);
@@ -196,17 +196,17 @@ void Network::send_messages_recursive(bool entered_by_user, uint32_t mes,  uint3
 		//calculate the shortest path from the sender to the current node
 		//if there is at least one traitor on the path - send the opposite message
 		vector<uint32_t> path = this->connect_matrix.shortest_path(sender_id, i);
-		if (this->traitors_in_vector(path))
-			network[i].set_input(fake_mes.get_mes());
-		else
-			network[i].set_input(message.get_mes());
+	///	if (this->traitors_in_vector(path))
+	///		network[i].set_input(fake_mes.get_mes());
+	///	else
+	///		network[i].set_input(message.get_mes());
 	}
 
 	for (uint32_t i = 0; i < network.size(); i++) {
 		if (network[i].get_is_sending())
 			continue;
 		//each node get a decision asking other nodes what they receive
-		network.at(i).set_node_decision(calc_node_decision(network[sender_id].get_output(), i, this->get_number_of_traitors(), sender_id));
+	///	network.at(i).set_node_decision(calc_node_decision(network[sender_id].get_output(), i, this->get_number_of_traitors(), sender_id));
 	}
 
 
@@ -221,7 +221,7 @@ void Network::send_messages_recursive(bool entered_by_user, uint32_t mes,  uint3
 
 	cout << endl << "Sender output: " << endl;
 	//for (uint32_t i = 0; i < network.at(sender_id).get_output().size(); i++)
-		cout << network.at(sender_id).get_output() << ' ';
+		cout << network.at(sender_id).get_output_mes() << ' ';
 	cout << endl << "----------------------------------------" << endl;
 
 	//end of sending
@@ -231,7 +231,6 @@ void Network::send_messages_recursive(bool entered_by_user, uint32_t mes,  uint3
 
 void Network::signed_messages(bool entered_by_user, uint32_t mes, uint32_t sender_id)
 {
-	Message fake_mes;
 	if (entered_by_user) {
 		cout << "Enter message (0 - retreat; 1 - attack)" << endl << "> ";
 		cin >> mes;
@@ -240,63 +239,65 @@ void Network::signed_messages(bool entered_by_user, uint32_t mes, uint32_t sende
 
 	//set the original message in network and make the fake message
 	message.create_mes(mes);
-	fake_mes.create_mes(make_fake_mes(message.get_mes()));
-
-	//set output of the sender
-	//if the sender traitor - send the opposite message
-	if (network[sender_id].get_type() == 0)
-		network[sender_id].set_output(message.get_mes());
-	else
-		network[sender_id].set_output(fake_mes.get_mes());
-
+	Message fake_mes;
+	fake_mes.create_mes(make_fake_mes(mes));
+	
 	//make the sender sending
 	network[sender_id].set_is_sending(true);
 
 	//clear the input vectors of all the nodes
 	for (uint32_t i = 0; i < network.size(); i++)
-		network.at(i).mes_vec.clear();
+		network.at(i).input_clear();
 
+	//set the message to the output of the sender
+	//if the sender traitor - set the fake message
+	if (network[sender_id].get_type() == 0)
+		network[sender_id].set_output(message);
+	else
+		network[sender_id].set_output(fake_mes);
+
+	//take the message from the output and sign it 
+	Message send_mes = network.at(sender_id).get_output_message();
+	send_mes.sign_mes(network.at(sender_id).get_id());
+	
+	//sending between the nodes
+	send_between(send_mes, network.at(0).get_id());
+
+
+	for (uint32_t i = 0; i < network.size(); i++) {
+		//if network didn't receive anything, already sending or traitor - this node do not transfer the message
+		if (network[i].get_is_sending() ||
+			network[i].is_input_empty() || 
+			network[i].get_type() == 1)
+			continue;
+
+		//the node takes his input and sign it
+		Message trans_mes = network[i].get_last_input();
+		trans_mes.sign_mes(network.at(i).get_id());
+
+		send_between(trans_mes, network.at(i).get_id());
+	}
+
+//end of sending
+	network[sender_id].set_is_sending(false);
+	
+}
+
+void Network::send_between(Message mes, uint32_t node_id)
+{
 	//send the message from the sender to all other nodes
 	for (uint32_t i = 0; i < network.size(); i++) {
-		if (network[i].get_is_sending())
+		if (network[i].get_id() == node_id || network[i].get_is_sending() || network[i].get_type() == 1)
 			continue;
-		//sign the message
-
-
 
 		//calculate the shortest path from the sender to the current node
 		//if there is at least one traitor on the path - do not transfer message
-		vector<uint32_t> path = this->connect_matrix.shortest_path(sender_id, i);
+		vector<uint32_t> path = this->connect_matrix.shortest_path(node_id, i);
 		if (this->traitors_in_vector(path))
 			continue;
 		else
-			network[i].set_input(message.get_mes());
+			network[i].receive_mes(mes);
 	}
-
-	for (uint32_t i = 0; i < network.size(); i++) {
-		if (network[i].get_is_sending())
-			continue;
-		//each node get a decision asking other nodes what they receive
-		network.at(i).set_node_decision(calc_node_decision(network[sender_id].get_output(), i, this->get_number_of_traitors(), sender_id));
-	}
-
-
-
-	//here each node get the result
-	cout << "Result input:" << endl;
-	for (uint32_t i = 0; i < network.size(); i++) {
-		if (network.at(i).get_is_sending())
-			continue;
-		cout << network.at(i).get_node_decision() << ' ';
-	}
-
-	cout << endl << "Sender output: " << endl;
-	//for (uint32_t i = 0; i < network.at(sender_id).get_output().size(); i++)
-		cout << network.at(sender_id).get_output() << ' ';
-	cout << endl << "----------------------------------------" << endl;
-
-	//end of sending
-	network[sender_id].set_is_sending(false);
 }
 
 uint32_t Network::calc_node_decision(uint32_t mes, uint32_t node_number, uint32_t number_of_traitors, uint32_t sender_id)
@@ -305,12 +306,12 @@ uint32_t Network::calc_node_decision(uint32_t mes, uint32_t node_number, uint32_
 
 	//if node is a traitor just simply respond the fake message opposite to the original
 	if (network.at(node_number).get_type() == 1) 
-			return make_fake_mes(this->message.get_mes());
+		return make_fake_mes(this->message.get_mes());
 
 	//if the node is loyal and there is no more traitors in the network
 	//node return the majority of his input vector
-	if (number_of_traitors == 0)
-		return network[node_number].input_majority(network[node_number].get_input());
+	//if (number_of_traitors == 0)
+	//	return network[node_number].input_majority(network[node_number].get_input());
 
 	//if the node is a loyal and there is still traitors in the network
 	//the node recursively asks all the other not sending nodes about their decisions 
@@ -323,15 +324,15 @@ uint32_t Network::calc_node_decision(uint32_t mes, uint32_t node_number, uint32_
 		vector<uint32_t> path = this->connect_matrix.shortest_path(node_number, i);
 		//if there is at least one traitor on the sending path
 		//change the original message in the network to the opposite
-		if (this->traitors_in_vector(path))
-			network[node_number].set_input(make_fake_mes(this->message.get_mes()));
-		else
-			network[node_number].set_input(calc_node_decision(mes, i, number_of_traitors - 1, sender_id));
+	//	if (this->traitors_in_vector(path))
+	//		network[node_number].set_input(make_fake_mes(this->message.get_mes_w_sign()));
+	//	else
+	//		network[node_number].set_input(calc_node_decision(mes, i, number_of_traitors - 1, sender_id));
 		network[node_number].set_is_sending(false);
 	}
-	uint32_t result = network[node_number].input_majority(network[node_number].get_input());
-	network[node_number].set_default_input(mes);
-	return result;
+	//uint32_t result = network[node_number].input_majority(network[node_number].get_input());
+	//network[node_number].set_default_input(mes);
+	return 0;//result;
 }
 
 
@@ -360,7 +361,30 @@ bool Network::check_Byzantine_from_recursive()
 			continue;
 
 		only_traitors = false;
-		if (network[commander_id].get_output() != network[i].get_node_decision())
+		if (network[commander_id].get_output_mes() != network[i].get_node_decision())
+			return false;
+	}
+	if (!only_traitors)
+		return true;
+	else
+		return false;
+}
+
+bool Network::check_Byzantine_signed_mes()
+{
+	uint32_t commander_id = get_commander_id();
+	if (commander_id == 999) {
+		cout << "No commander in the network" << endl;
+		return false;
+	}
+	bool only_traitors = true;
+	for (uint32_t i = 0; i < this->get_number_of_nodes(); i++) {
+		//do not check commander and traitors
+		if (i == commander_id || network[i].get_type())
+			continue;
+
+		only_traitors = false;
+		if (network[i].is_input_empty() || network[commander_id].get_output_mes() != network[i].get_last_input().get_mes())
 			return false;
 	}
 	if (!only_traitors)

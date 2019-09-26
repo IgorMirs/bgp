@@ -9,7 +9,7 @@
 class Node
 {
 	Message output_value;
-	std::vector<uint32_t> input;
+	std::vector<Message> input;
 	uint32_t ID{ 0 };                                    //node id (number)
 	bool commander{ false };                                    //1 - commander
 	uint32_t type{ 0 };                                    //0 - loyal; 1 - traitor
@@ -17,9 +17,6 @@ class Node
 	uint32_t node_decision{ 999 };                        //1 - node decides to attack; 0 - retreat
 
 public:
-	std::vector<Message> mes_vec;
-
-
 	std::vector<std::vector<int32_t>>  major_matrix;  //matrix for finding majority
 
 	//constructor
@@ -35,17 +32,25 @@ public:
 	bool get_is_sending() { return is_sending; }
 	void set_commander(bool value) { commander = value; }            //make the node commander.
 	void set_is_sending(bool value) { is_sending = value; }
-	uint32_t get_output() { return output_value.get_mes(); }            //get output vector of the node
-	std::vector<uint32_t> get_input() { return input; }
-	void set_output(uint32_t value) { output_value.create_mes(value); }  //put the value to the output vector of the node
-	void set_input(uint32_t value) { input.push_back(value); }
+	uint32_t get_output_mes() { return output_value.get_mes(); }            //get the sending message from the output
+	Message get_output_message() { return output_value.get_message(); }            //get the whole message with signs
+	Message get_last_input() { return input[input.size() - 1]; }
+	void set_output(Message value) {			//put the value to the output vector of the node
+		output_value.set_mes(value);
+	}  
+	void set_input(Message value) {
+		input.push_back(value); 
+	}
+
+	
+	void receive_mes(Message mes);  //the node should receive only new messages (which are not in his input vector)
 	void set_type(uint32_t value) { type = value; }                //0 - loyal; 1 - traitor
-	void set_default_input(uint32_t mes) { input.assign(1, mes); }
+	bool is_input_empty() { if (input.empty()) return 1; else return 0; }
+	void set_default_input(Message mes) { input.assign(1, mes); }
 	void input_clear() { input.clear(); }
 	void output_clear() { output_value.clear_mes(); }
 	uint32_t get_node_decision() { return node_decision; }
 	void set_node_decision(uint32_t value) { node_decision = value; }
-
 
 	~Node();
 };

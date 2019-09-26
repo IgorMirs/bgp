@@ -15,7 +15,7 @@ void Print::print_node_in_file(Node* node)
 		//vector<uint32_t> output = node->get_output();
 		//for (uint32_t i = 0; i < output.size(); i++)  //printing output
 		//{
-			out_node << node->get_output() << ' ';
+			out_node << node->get_output_mes() << ' ';
 		//}
 		out_node << "\t\t(0 - retreat; 1 - attack)" << endl;
 	}
@@ -48,7 +48,7 @@ void Print::print_node_on_screen(Node* node)
 	if (node->is_commander() == 1)
 	{
 		cout << "Output value" << '\t';
-		uint32_t output = node->get_output();
+		uint32_t output = node->get_output_mes();
 		//for (uint32_t i = 0; i < output.size(); i++)  //printing output
 		//{
 			cout << output << ' ';
