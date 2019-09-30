@@ -14,7 +14,7 @@ using namespace std;
 ofstream out; //global variable for printing in file
 extern ofstream out_node;
 
-
+//the menu to set the parameters to the program
 char menu_item()
 {
 	char variant;
@@ -32,6 +32,7 @@ char menu_item()
 	return variant;
 }
 
+//checking the OM recursive sending algorithm
 bool check_recursive_sending(Network* from) {
 	if (from->message.get_mes() == 999)
 	{
@@ -50,6 +51,7 @@ bool check_recursive_sending(Network* from) {
 	return true;
 }
 
+//checking SM sending algorithm
 bool check_signed_sending(Network* from) {
 	if (from->message.get_mes() == 999)
 	{
@@ -68,8 +70,7 @@ bool check_signed_sending(Network* from) {
 	return true;
 }
 
-
-
+//setting the size of the network by the user
 uint32_t setSizeOfNetwork()
 {
 	uint32_t value;
@@ -89,9 +90,7 @@ uint32_t setSizeOfNetwork()
 	return value;
 }
 
-
-
-
+//checking the solution for different amounts and combinations of traitors in the network (OM recursive)
 void testing_connectivity_recursive(Network* net)
 {
 	Network* temp_net = net;
@@ -159,6 +158,7 @@ void testing_connectivity_recursive(Network* net)
 	out.close();
 }
 
+//checking the solution for different amounts and combinations of traitors in the network (SM)
 void testing_connectivity_signed(Network* net)
 {
 	Network* temp_net = net;
@@ -228,7 +228,8 @@ vector <bool> a;
 vector <uint32_t> b;
 vector <vector<uint32_t>> matrix;
 
-void location(uint32_t t, uint32_t degree) //finding the unique location of the nodes in the network
+//finding the unique location of the nodes in the network
+void location(uint32_t t, uint32_t degree) 
 {
 	if (t == degree)
 	{
@@ -250,7 +251,6 @@ void location(uint32_t t, uint32_t degree) //finding the unique location of the 
 }
 
 
-
 int main(int argc, const char* argv[]) {
 	//file where we put all the steps of sending messages
 	//out_node.open("Test_case.txt");
@@ -261,9 +261,11 @@ int main(int argc, const char* argv[]) {
 
 	//net->connect_matrix.connect_matrix_from_file();
 	pr->print_connect_matrix(&net->connect_matrix);
+	
 
 	//starting working on signed messages
-	testing_connectivity_signed(net);
+	//testing_connectivity_signed(net);
+	testing_connectivity_recursive(net);
 
 	//menu
 	bool Exit = false;

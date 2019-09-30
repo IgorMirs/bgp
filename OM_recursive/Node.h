@@ -42,7 +42,14 @@ public:
 		input.push_back(value); 
 	}
 
-	
+	std::vector<uint32_t> get_input_mes() {
+		std::vector<uint32_t> result;
+		for (uint32_t i = 0; i < this->input.size(); i++) {
+			result.push_back(input.at(i).get_mes());
+		}
+		return (result);
+	}
+
 	void receive_mes(Message mes);  //the node should receive only new messages (which are not in his input vector)
 	void set_type(uint32_t value) { type = value; }                //0 - loyal; 1 - traitor
 	bool is_input_empty() { if (input.empty()) return 1; else return 0; }
